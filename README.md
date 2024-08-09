@@ -28,3 +28,17 @@ This project is a real estate website built using React and Vite. It provides a 
    ```bash
    git clone https://github.com/sumit2221-div/real-estate-website.git
    cd real-estate-website
+
+   
+
+  
+### Install dependencies:  
+npm install
+# or
+yarn install
+ ### Start the development server:
+
+
+npm run dev
+# or
+yarn dev
