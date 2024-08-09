@@ -31,14 +31,14 @@ This project is a real estate website built using React and Vite. It provides a 
 
    
 
+```bash
   
 ### Install dependencies:  
 npm install
-# or
+
 yarn install
  ### Start the development server:
 
 
 npm run dev
-# or
 yarn dev
