@@ -9,6 +9,7 @@ import Addproperty from './components/addproperty.jsx';
 import Profile from './components/profile.jsx';
 import Home from './components/home.jsx';
 import Register from './components/regestation/register.jsx';
+import PropertyFilter from './components/Allproperties.jsx';
 function App() {
   const [count, setCount] = useState(0);
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/property" element={<Addproperty />} />
           <Route path="/profile" element={<Profile />} />
           <Route path='/registation' element={<Register/>}/>
+        <Route path='/properties' element={<PropertyFilter/>}/>
         </Routes>
       </div>
       <Footer />
