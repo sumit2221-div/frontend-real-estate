@@ -87,10 +87,10 @@ const AllProperties = () => {
               className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Type</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Villa">Villa</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Plot">Plot</option>
+              <option value="flat">flat</option>
+              <option value="plot">plot</option>
+              <option value="bungalow">bungalow</option>
+              <option value="building">building</option>
             </select>
           </div>
 

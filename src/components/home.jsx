@@ -47,28 +47,28 @@ function Home() {
             </div>
             <div className="flex flex-wrap justify-center gap-2 mt-4">
               <button
-                onClick={() => handlePresetSearch('Apartment')}
-                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => handlePresetSearch('building')}
+                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                Apartment
+                Building
               </button>
               <button
-                onClick={() => handlePresetSearch('Villa')}
-                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => handlePresetSearch('flat')}
+                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                Villa
+                Flat
               </button>
               <button
-                onClick={() => handlePresetSearch('Commercial')}
-                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => handlePresetSearch('plot')}
+                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                Commercial
+                Plot
               </button>
               <button
-                onClick={() => handlePresetSearch('Rent')}
-                className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => handlePresetSearch('bungalow')}
+                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                Rent
+                Bungalow
               </button>
             </div>
           </div>
