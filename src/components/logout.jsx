@@ -12,16 +12,14 @@ function LogoutButton() {
     const handleLogout = async () => {
         const accessToken = localStorage.getItem('accessToken');
 
-        if (!accessToken) {
-            console.error('Invalid token: Token is null or undefined.');
-            return;
-        }
+        console.log('Access Token:', accessToken); 
+        
 
         setLoading(true);
         try {
             const response = await axios.post(
                 'https://real-estate-9ezs.onrender.com/api/auth/logout',
-                null,
+            null,
                 {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,

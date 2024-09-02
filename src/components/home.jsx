@@ -17,8 +17,7 @@ function Home() {
   };
 
   const handlePresetSearch = (presetQuery) => {
-    setQuery(presetQuery);
-    handleSearch(presetQuery);
+    navigate(`/properties?type=${encodeURIComponent(presetQuery)}`);
   };
 
   return (

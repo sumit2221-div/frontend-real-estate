@@ -15,7 +15,8 @@ function Header() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn) || localStorage.getItem('accessToken');
+  const isLoggedIn = useSelector(state => state.auth.isLoggedin) || localStorage.getItem('accessToken');
+  
 
   const navItems = [
     {
@@ -39,8 +40,9 @@ function Header() {
     {
       icon: <CgProfile />,
       text: "Profile",
-      slug: "/profile",
+      slug: `/profile`,
       active: isLoggedIn,
+     
     },
     {
       icon: <IoAddCircleOutline />,
@@ -58,7 +60,7 @@ function Header() {
           item.active && (
             <button
               key={index}
-              onClick={() => navigate(item.slug)}
+              onClick={item.onClick ? item.onClick : () => navigate(item.slug)}
               className={`relative flex flex-col items-center mx-2 text-gray-700 hover:text-black group w-[70px] ${location.pathname === item.slug ? 'text-black font-bold underline' : ''}`}
             >
               <span className="text-3xl">{item.icon}</span>
@@ -81,7 +83,11 @@ function Header() {
                 <button
                   key={index}
                   onClick={() => {
-                    navigate(item.slug);
+                    if (item.onClick) {
+                      item.onClick();
+                    } else {
+                      navigate(item.slug);
+                    }
                     setIsMenuOpen(false);
                   }}
                   className={`flex items-center p-2 text-gray-700 hover:text-black hover:bg-gray-100 w-full text-left ${location.pathname === item.slug ? 'text-black font-bold' : ''}`}

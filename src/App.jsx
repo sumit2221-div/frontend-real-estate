@@ -5,7 +5,7 @@ import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
 import Login from './components/login.jsx';
 import Favorite from './components/favorite.jsx';
-import Addproperty from './components/addproperty.jsx';
+import AddProperty from './components/addproperty.jsx';
 import Profile from './components/profile.jsx';
 import Home from './components/home.jsx';
 import Register from './components/regestation/register.jsx';
@@ -21,7 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/favorite" element={<Favorite />} />
-          <Route path="/property" element={<Addproperty />} />
+          <Route path="/property" element={<AddProperty/>} />
           <Route path="/profile" element={<Profile />} />
           <Route path='/registation' element={<Register/>}/>
         <Route path='/properties' element={<PropertyFilter/>}/>

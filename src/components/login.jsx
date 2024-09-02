@@ -41,9 +41,7 @@ function Login() {
         localStorage.setItem('accessToken', accessToken);
 
         // Optionally, store other tokens if provided
-        if (response.data.refreshToken) {
-          localStorage.setItem('refreshToken', response.data.refreshToken);
-        }
+     
 
         // Dispatch login action to store user data in Redux store
         dispatch(authLogin({ email: formData.email, password: formData.password }));
@@ -89,9 +87,13 @@ function Login() {
             required
           />
           <div className="flex flex-col justify-center">
-            <button className="px-6 py-3 font-bold text-white transition-all duration-500 ease-in-out transform rounded-full shadow-lg bg-gradient-to-r from-green-900 to-green-900 hover:from-green-900 hover:to-green-800 hover:scale-110 hover:brightness-110 hover:animate-pulse active:animate-bounce item-center" type='submit'>
-              SUBMIT
-            </button>
+          <button
+  className="px-6 py-3 font-bold text-white transition-all duration-500 ease-in-out transform rounded-full shadow-lg bg-gradient-to-r from-green-900 to-green-900"
+  type="submit"
+>
+  SUBMIT
+</button>
+
             <p className="mt-2 text-base text-center text-gray-600">
               New user? <Link to="/registration" className="font-medium hover:underline">Sign up here</Link>
             </p>
