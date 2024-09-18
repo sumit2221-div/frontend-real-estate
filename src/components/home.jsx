@@ -4,6 +4,7 @@ import photo from "../assets/wp4110662.jpg";
 import house from "../assets/house.png";
 import protect from "../assets/protected.png";
 import buy from "../assets/buy.png";
+import Propertysection from './propertysection.jsx';
 
 function Home() {
   const [query, setQuery] = useState('');
@@ -73,6 +74,7 @@ function Home() {
           </div>
         </div>
       </div>
+      <Propertysection/>
 
       <div className="flex flex-col items-center py-10 bg-white sm:py-20">
         <h1 className="mt-6 font-mono text-3xl text-center text-black sm:mt-10 sm:text-4xl lg:text-5xl">

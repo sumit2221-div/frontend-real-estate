@@ -76,7 +76,10 @@ function BasicInfoForm({ formData, handleChange, nextStep }) {
         <button
           type="button"
           onClick={handleNext}
-          className="w-full px-4 py-2 text-white transition-all duration-500 ease-in-out transform rounded-full shadow-lg bg-gradient-to-r from-green-900 to-green-800 hover:scale-105 hover:brightness-110"
+        
+          className="w-full px-10 py-3 font-bold text-white transition-all duration-500 ease-in-out transform rounded-full shadow-lg bg-gradient-to-r from-green-900 to-green-900"
+        
+       
         >
           Next
         </button>

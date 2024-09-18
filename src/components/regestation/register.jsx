@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BasicInfoForm from './basicfrom.jsx';
-import AvatarForm from "./avatarform.jsx"
+import AvatarForm from "./avatarform.jsx";
+
 function Register() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ function Register() {
     avatar: null,
   });
   const [error, setError] = useState(''); // State to hold error messages
+  const [loading, setLoading] = useState(false); // State to handle loading
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,6 +38,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Clear previous errors
+    setLoading(true); // Set loading to true when form is submitted
 
     const registrationData = new FormData();
     registrationData.append('fullname', formData.fullname);
@@ -53,11 +56,13 @@ function Register() {
         },
       });
 
-      if (response.ok) {
+      setLoading(false); // Stop loading after response
+      if (response.status === 200) {
         console.log('Registration successful:', response.data);
-        navigate('/login'); 
+        navigate('/login');
       }
     } catch (error) {
+      setLoading(false); // Stop loading in case of error
       if (error.response) {
         setError(error.response.data.message || 'Registration failed. Please try again.');
       } else {
@@ -80,6 +85,12 @@ function Register() {
         />
       )}
       {error && <p className="mt-4 text-center text-red-500">{error}</p>}
+      {loading && (
+        <div className="mt-4 text-center">
+          <div className="spinner"></div> {/* Optional: You can use a CSS spinner here */}
+          <p className="text-gray-500">Registering, please wait...</p>
+        </div>
+      )}
     </div>
   );
 }

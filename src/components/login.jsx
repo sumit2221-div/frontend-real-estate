@@ -12,8 +12,9 @@ function Login() {
     email: "",
     password: ""
   });
-  const [error, setError] = useState(""); // State to hold error message
-  const [loading, setLoading] = useState(false); // State to track loading status
+  const [error, setError] = useState(""); 
+  const [loading, setLoading] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,30 +24,28 @@ function Login() {
     });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handlesubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when starting the request
-    setError(""); // Clear any existing errors
+    setLoading(true); 
+    setError(""); 
 
     try {
       const response = await axios.post("https://real-estate-9ezs.onrender.com/api/auth/login", formData);
       if (response.status === 200) {
         console.log(response.data);
-        const { accessToken } = response.data; // Extract accessToken from the response
+        const { accessToken } = response.data; 
 
-        // Store the access token in local storage
         localStorage.setItem('accessToken', accessToken);
 
-        // Optionally, store other tokens if provided
-     
-
-        // Dispatch login action to store user data in Redux store
         dispatch(authLogin({ email: formData.email, password: formData.password }));
 
-        // Navigate to the home page or another page
         navigate("/");
       }
     } catch (error) {
@@ -58,7 +57,7 @@ function Login() {
         setError("Error setting up the request. Please try again.");
       }
     } finally {
-      setLoading(false); // Set loading to false when the request is complete
+      setLoading(false); 
     }
   };
 
@@ -77,25 +76,34 @@ function Login() {
             placeholder="Enter email"
             required
           />
-          <InputTab
-            label="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            name="password"
-            placeholder="Enter password"
-            required
-          />
+          <div className="relative">
+            <InputTab
+              label="password"
+              type={showPassword ? "text" : "password"} // Toggle between text and password
+              value={formData.password}
+              onChange={handleChange}
+              name="password"
+              placeholder="Enter password"
+              required
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute flex items-center text-4xl text-gray-500 right-3 bottom-2"
+            >
+              {showPassword ? '👁️' : '🙈'} 
+            </button>
+          </div>
           <div className="flex flex-col justify-center">
-          <button
-  className="px-6 py-3 font-bold text-white transition-all duration-500 ease-in-out transform rounded-full shadow-lg bg-gradient-to-r from-green-900 to-green-900"
-  type="submit"
->
-  SUBMIT
-</button>
+            <button
+              className="px-6 py-3 font-bold text-white transition-all duration-500 ease-in-out transform rounded-full shadow-lg bg-gradient-to-r from-green-900 to-green-900"
+              type="submit"
+            >
+              SUBMIT
+            </button>
 
             <p className="mt-2 text-base text-center text-gray-600">
-              New user? <Link to="/registration" className="font-medium hover:underline">Sign up here</Link>
+              New user? <Link to="/registation" className="font-medium hover:underline">Sign up here</Link>
             </p>
           </div>
         </form>
