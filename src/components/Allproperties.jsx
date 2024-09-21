@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PropertyCard from '../elements/propertycard.jsx'
 
-// Custom hook to parse query parameters
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-// Function to fetch properties based on filters
 const fetchProperties = async (filters) => {
   try {
-    console.log('Fetching properties with filters:', filters); // Debugging
     const response = await axios.get('https://real-estate-9ezs.onrender.com/api/property/', { params: filters });
-    console.log('API response:', response.data); // Debugging
     return response.data;
   } catch (error) {
     console.error('Error fetching properties:', error);
@@ -35,17 +32,7 @@ const AllProperties = () => {
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
-    const filters = {
-      query: searchQuery,
-      type,
-      size,
-      minCost,
-      maxCost,
-      city,
-      state,
-      country,
-    };
-
+    const filters = { query: searchQuery, type, size, minCost, maxCost, city, state, country };
     fetchProperties(filters).then(data => {
       setProperties(data || []);
     });
@@ -59,9 +46,6 @@ const AllProperties = () => {
 
   return (
     <div className="container px-4 py-8 mx-auto">
-      
-
-      {/* Search Bar */}
       <div className="flex justify-center mb-8">
         <input
           type="text"
@@ -75,11 +59,8 @@ const AllProperties = () => {
         />
       </div>
 
-      {/* Filter Controls */}
       <div className="p-4 mb-6 bg-white rounded-lg shadow-md">
-       
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-7">
-          {/* Filter Rows */}
           <div className="flex flex-col gap-4">
             <select
               value={type}
@@ -159,22 +140,14 @@ const AllProperties = () => {
         </div>
       </div>
 
-      {/* Display Properties */}
       {properties.length > 0 ? (
-        
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-         
           {properties.map(property => (
-            <div key={property._id} className="overflow-hidden bg-white rounded-lg shadow-lg">
-              <img src={property.photos[0]} alt={property.name} className="object-cover w-full h-48" />
-              <div className="p-4">
-                <h2 className="mb-2 text-xl font-semibold">{property.name}</h2>
-                <p className="mb-1 text-gray-600">{property.type}</p>
-                <p className="mb-1 font-semibold text-gray-800">{`$${property.cost}`}</p>
-                <p className="mb-1 text-gray-600">{`${property.size} sq ft`}</p>
-                <p className="text-gray-600">{`${property.address.city}, ${property.address.state}, ${property.address.country}`}</p>
-              </div>
-            </div>
+            <PropertyCard 
+              key={property._id} 
+              property={property} 
+              onFavorite={() => favoriteProperty(property._id)} 
+            />
           ))}
         </div>
       ) : (

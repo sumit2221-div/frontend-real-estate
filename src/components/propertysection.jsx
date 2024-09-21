@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import PropertyCard from '../elements/propertycard.jsx';
+import { Box, Button, Typography, CircularProgress, Grow } from '@mui/material';
 
-function Propertysection() {
+function PropertySection() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
 
   const fetchProperties = async (filter) => {
     setLoading(true);
     setError('');
     try {
-      let url = 'https://your-backend-url.com/api/property/';
+      let url = 'https://real-estate-9ezs.onrender.com/api/property';
       if (filter) {
         url += `?status=${filter}`;
       }
       const response = await axios.get(url);
       setProperties(response.data);
+      console.log(response.data);
     } catch (err) {
       setError('Failed to fetch properties');
     } finally {
@@ -23,43 +27,73 @@ function Propertysection() {
     }
   };
 
-  return (
-    <div className='w-full p-6 bg-white h-lvh'>
-      <div className='flex items-center justify-center mb-6 space-x-4'>
-        <button
-          className='px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600'
-          onClick={() => fetchProperties()} // Fetch all properties
-        >
-          All Properties
-        </button>
-        <button
-          className='px-6 py-2 text-white bg-green-500 rounded hover:bg-green-600'
-          onClick={() => fetchProperties('for sale')} // Fetch properties for sale
-        >
-          For Sale
-        </button>
-        <button
-          className='px-6 py-2 text-white bg-orange-500 rounded hover:bg-orange-600'
-          onClick={() => fetchProperties('for rent')} // Fetch properties for rent
-        >
-          For Rent
-        </button>
-      </div>
+  const favoriteProperty = async (propertyId) => {
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      await axios.post(
+        `https://real-estate-9ezs.onrender.com/api/favorite/${propertyId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      alert('Property added to favorites!');
+    } catch (error) {
+      console.error('Error favoriting property:', error);
+      alert('Failed to add property to favorites.');
+    }
+  };
 
-      {loading && <p>Loading properties...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY;
+    const threshold = 400; // Adjust this value as needed
+    if (scrollPosition > threshold) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProperties();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <Box className='w-full p-6 bg-white h-lvh'>
+      <Box className='flex items-center justify-center mb-6 space-x-4'>
+        <Button variant="contained" color="primary" onClick={() => fetchProperties()}>
+          All Properties
+        </Button>
+        <Button variant="contained" color="success" onClick={() => fetchProperties(' sale')}>
+          For Sale
+        </Button>
+        <Button variant="contained" color="warning" onClick={() => fetchProperties('rent')}>
+          For Rent
+        </Button>
+      </Box>
+
+      {loading && <CircularProgress />}
+      {error && <Typography color="error">{error}</Typography>}
+
+      {/* Grow effect for property cards */}
+      <Box className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
         {properties.map((property) => (
-          <div key={property.id} className='p-4 border rounded shadow'>
-            <h3 className='text-lg font-semibold'>{property.name}</h3>
-            <p>{property.type}</p>
-            <p>{property.status === 'for sale' ? 'For Sale' : 'For Rent'}</p>
-            <p>Cost: ${property.cost}</p>
-          </div>
+          <Grow in={isVisible} timeout={1000} key={property._id}>
+            <div>
+              <PropertyCard 
+                property={property} 
+                onFavorite={() => favoriteProperty(property._id)} 
+              />
+            </div>
+          </Grow>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
-export default Propertysection;
+export default PropertySection;

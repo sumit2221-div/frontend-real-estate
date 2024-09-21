@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Button, TextField, Typography, Grid, Card, CardContent, CardMedia } from '@mui/material';
 import photo from "../assets/wp4110662.jpg";
 import house from "../assets/house.png";
 import protect from "../assets/protected.png";
@@ -8,6 +9,7 @@ import Propertysection from './propertysection.jsx';
 
 function Home() {
   const [query, setQuery] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = (searchQuery = '') => {
@@ -21,83 +23,127 @@ function Home() {
     navigate(`/properties?type=${encodeURIComponent(presetQuery)}`);
   };
 
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY;
+    const threshold = 400; // Change this value based on when you want the effect to start
+    if (scrollPosition > threshold) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
-      <div className="relative w-full h-screen bg-center bg-cover" style={{ backgroundImage: `url(${photo})` }}>
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="flex flex-col items-center w-full p-4 bg-transparent rounded-lg shadow-lg sm:p-6">
-            <h1 className="text-4xl text-center text-white sm:text-6xl lg:text-8xl">Believe in Finding it</h1>
-            <h2 className="mb-4 text-lg font-semibold text-center text-white sm:mb-6 sm:text-2xl">
+      {/* Background image with overlay */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100vh',
+          backgroundImage: `url(${photo})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <Box sx={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'rgba(0, 0, 0, 0.5)' }}>
+          <Box sx={{ textAlign: 'center', maxWidth: '600px', px: 2 }}>
+            <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+              Believe in Finding it
+            </Typography>
+            <Typography variant="h6" sx={{ color: 'white', mb: 2 }}>
               Search Properties for Sale and Rent
-            </h2>
-            <div className="flex flex-col sm:flex-row items-center w-full sm:w-[700px] mb-4 h-[50px] sm:h-[70px]">
-              <input
-                type="text"
+            </Typography>
+            {/* Search box */}
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
+              <TextField
+                variant="outlined"
                 placeholder="Enter property details"
-                className="w-full h-full p-2 text-gray-700 placeholder-gray-500 border border-gray-300 sm:p-4 rounded-t-2xl sm:rounded-l-2xl sm:rounded-t-none focus:outline-none focus:ring-2 focus:ring-green-500"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                sx={{ flex: 1, bgcolor: 'white' }}
               />
-              <button
+              <Button
+                variant="contained"
                 onClick={() => handleSearch()}
-                className="w-full h-full p-3 text-white transition-transform transform bg-green-500 sm:w-auto sm:p-4 rounded-b-2xl sm:rounded-r-2xl sm:rounded-b-none hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 hover:scale-105"
+                sx={{
+                  bgcolor: 'green.500',
+                  '&:hover': { bgcolor: 'green.600' },
+                }}
               >
                 Search
-              </button>
-            </div>
-            <div className="flex flex-wrap justify-center gap-2 mt-4">
-              <button
-                onClick={() => handlePresetSearch('building')}
-                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                Building
-              </button>
-              <button
-                onClick={() => handlePresetSearch('flat')}
-                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                Flat
-              </button>
-              <button
-                onClick={() => handlePresetSearch('plot')}
-                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                Plot
-              </button>
-              <button
-                onClick={() => handlePresetSearch('bungalow')}
-                className="px-6 py-3 text-sm font-semibold text-white transition-all transform rounded-full shadow-lg bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                Bungalow
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Propertysection/>
+              </Button>
+            </Box>
 
-      <div className="flex flex-col items-center py-10 bg-white sm:py-20">
-        <h1 className="mt-6 font-mono text-3xl text-center text-black sm:mt-10 sm:text-4xl lg:text-5xl">
+            {/* Preset buttons */}
+            <Box sx={{ mt: 2 }}>
+              {['Building', 'Flat', 'Plot', 'Bungalow'].map((type) => (
+                <Button
+                  key={type}
+                  variant="outlined"
+                  onClick={() => handlePresetSearch(type.toLowerCase())}
+                  sx={{
+                    mx: 1,
+                    color: 'white',
+                    borderColor: 'green.400',
+                    '&:hover': { borderColor: 'green.600', bgcolor: 'green.500' },
+                  }}
+                >
+                  {type}
+                </Button>
+              ))}
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Property section */}
+      <Propertysection />
+
+      {/* Why Us Section */}
+      <Box sx={{ py: 12, bgcolor: 'gray.100', opacity: isVisible ? 1 : 0, transition: 'opacity 0.6s ease' }}>
+        <Typography variant="h4" align="center" sx={{ color: 'gray.800', mb: 4 }}>
           Why You Should Work With Us
-        </h1>
-        <div className="flex flex-col sm:flex-row w-full sm:w-[1200px] h-auto sm:h-[350px] justify-around items-center mt-6 sm:mt-10 space-y-4 sm:space-y-0">
-          <div className="flex flex-col items-center justify-center w-full h-auto p-4 text-center bg-white shadow-xl rounded-xl sm:w-1/4 sm:h-full">
-            <img src={house} alt="House" className="w-[90px] h-[70px] mb-4" />
-            <h1 className="mb-2 text-xl font-semibold">Wide Range of Properties</h1>
-            <p className="text-sm">We offer expert legal help for all related property in India.</p>
-          </div>
-          <div className="flex flex-col items-center justify-center w-full h-auto p-4 text-center bg-white shadow-xl rounded-xl sm:w-1/4 sm:h-full">
-            <img src={buy} alt="Buy or Rent" className="w-[90px] h-[70px] mb-4" />
-            <h1 className="mb-2 text-xl font-semibold">Buy or Rent Homes</h1>
-            <p className="text-sm">We offer expert legal help for all related property in India.</p>
-          </div>
-          <div className="flex flex-col items-center justify-center w-full h-auto p-4 text-center bg-white shadow-xl rounded-xl sm:w-1/4 sm:h-full">
-            <img src={protect} alt="Trusted by Thousands" className="w-[90px] h-[70px] mb-4" />
-            <h1 className="mb-2 text-xl font-semibold">Trusted by Thousands</h1>
-            <p className="text-sm">We offer expert legal help for all related property in India.</p>
-          </div>
-        </div>
-      </div>
+        </Typography>
+        <Grid container spacing={4} justifyContent="center">
+          {[
+            {
+              img: house,
+              title: "Wide Range of Properties",
+              text: "We offer expert legal help for all related property in India.",
+            },
+            {
+              img: buy,
+              title: "Buy or Rent Homes",
+              text: "We offer a large variety of properties across locations.",
+            },
+            {
+              img: protect,
+              title: "Trusted by Thousands",
+              text: "Our clients trust us for professional service and support.",
+            },
+          ].map((item, idx) => (
+            <Grid item xs={12} sm={6} md={4} key={idx}>
+              <Card sx={{ textAlign: 'center', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
+                <CardMedia component="img" image={item.img} alt={item.title} sx={{ width: '100px', margin: 'auto', mb: 2 }} />
+                <CardContent>
+                  <Typography variant="h6" sx={{ mb: 1 }}>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'gray.600' }}>
+                    {item.text}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </>
   );
 }

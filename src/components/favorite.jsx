@@ -1,16 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import PropertyCard from '../elements/propertycard.jsx'
 
 function Favorite() {
-  const favorites = []; // This would be populated with actual data
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.get('https://real-estate-9ezs.onrender.com/api/favorite/', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+        const favoriteIds = response.data.favProperty.map(fav => fav.property[0]);
+        const propertyResponses = await Promise.all(favoriteIds.map(id =>
+          axios.get(`https://real-estate-9ezs.onrender.com/api/property/${id}`)
+        ));
+
+        const fetchedProperties = propertyResponses.map(res => res.data);
+        setProperties(fetchedProperties);
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+        setError('Failed to fetch favorites. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
 
   return (
-    <div className='w-full h-[100vh] flex flex-col items-center justify-center'>
-      <h1 className='mb-4 text-2xl font-bold'>Favorites</h1>
-      {favorites.length > 0 ? (
-        <ul className='space-y-4'>
-          {favorites.map((item, index) => (
-            <li key={index} className='p-4 border rounded shadow'>
-              {item.name}
+    <div className='flex flex-col items-center justify-center w-full h-screen bg-gray-100'>
+      <h1 className='mb-6 text-3xl font-bold text-blue-600'>Favorites</h1>
+      {loading ? (
+        <p>Loading favorites...</p>
+      ) : error ? (
+        <p className='text-red-500'>{error}</p>
+      ) : properties.length > 0 ? (
+        <ul className='w-full max-w-xl space-y-8'>
+          {properties.map((property) => (
+            <li key={property._id} className='p-4 transition-shadow bg-white border rounded-lg shadow-lg hover:shadow-xl'>
+              <PropertyCard property={property} />
             </li>
           ))}
         </ul>

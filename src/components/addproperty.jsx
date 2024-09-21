@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddProperty = () => {
   const [step, setStep] = useState(1);
@@ -21,6 +22,7 @@ const AddProperty = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const accessToken = localStorage.getItem('accessToken')
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,23 +56,29 @@ const AddProperty = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+   
+  
     const dataToSubmit = new FormData();
+    console.log(dataToSubmit)
+  
+    // Append all form data to FormData object
     for (const key in formData) {
       if (key === 'photos') {
         for (let i = 0; i < formData.photos.length; i++) {
           dataToSubmit.append('photos', formData.photos[i]);
         }
       } else {
+        // Ensure status and all other fields are added
         dataToSubmit.append(key, formData[key]);
       }
     }
-
+  
     try {
-      await axios.post('https://real-estate-9ezs.onrender.com/api/property/', dataToSubmit, {
-        headers: { 'Content-Type': 'multipart/form-data',
+      await axios.post('https://real-estate-9ezs.onrender.com/api/property', dataToSubmit, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${accessToken}`,
-         },
+        },
       });
       alert('Property added successfully');
       setFormData({
@@ -94,8 +102,10 @@ const AddProperty = () => {
       alert('An error occurred while adding the property');
     } finally {
       setLoading(false);
+    
     }
   };
+  
 
   return (
     <div className='p-4'>
@@ -224,19 +234,19 @@ const AddProperty = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Status:</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  required
-                >
-                  <option value="">Select Status</option>
-                  <option value="sell">sell</option>
-                  <option value="rent">rent</option>
-                </select>
-              </div>
+  <label className="block text-gray-700">Status:</label>
+  <select
+    name="status"
+    value={formData.status}
+    onChange={handleChange}
+    className="w-full p-2 border rounded"
+    required
+  >
+    <option value="">Select Status</option>
+    <option value="sell">sell</option>
+    <option value="rent">rent</option>
+  </select>
+</div>
               <button
                 type='submit'
                 className='px-4 py-2 text-white bg-blue-500 rounded'
