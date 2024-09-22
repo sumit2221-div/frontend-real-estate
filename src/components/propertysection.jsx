@@ -61,8 +61,8 @@ function PropertySection() {
   }, []);
 
   return (
-    <Box className='w-full p-6 bg-white h-lvh'>
-      <Box className='flex items-center justify-center mb-6 space-x-4'>
+    <Box className='w-full p-6 bg-white'>
+      <Box className='flex flex-col items-center justify-center mb-6 space-y-4 md:flex-row md:space-y-0 md:space-x-4'>
         <Button variant="contained" color="primary" onClick={() => fetchProperties()}>
           All Properties
         </Button>
@@ -77,7 +77,7 @@ function PropertySection() {
       {loading && <CircularProgress />}
       {error && <Typography color="error">{error}</Typography>}
 
-      <Box className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
+      <Box className='grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3'>
         {properties.map((property) => (
           <Grow in={isVisible} timeout={1000} key={property._id}>
             <div>

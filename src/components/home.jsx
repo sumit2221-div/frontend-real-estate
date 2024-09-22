@@ -32,7 +32,6 @@ function Home() {
       setIsVisible(false);
     }
   };
-
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -51,7 +50,7 @@ function Home() {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           bgcolor: 'rgba(0, 0, 0, 0.5)',
-          filter: 'brightness(0.7)', // Dull the image
+          filter: 'brightness(1.0)', // Dull the image
           
         }}
       >
