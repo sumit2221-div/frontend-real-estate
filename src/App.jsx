@@ -10,6 +10,7 @@ import Profile from './components/profile.jsx';
 import Home from './components/home.jsx';
 import Register from './components/regestation/register.jsx';
 import PropertyFilter from './components/Allproperties.jsx';
+import PropertyDetail from './components/propertydetails.jsx';
 function App() {
   const [count, setCount] = useState(0);
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path='/registation' element={<Register/>}/>
         <Route path='/properties' element={<PropertyFilter/>}/>
+        <Route path="/property/:propertyId" element={<PropertyDetail />} />
         </Routes>
       </div>
       <Footer />

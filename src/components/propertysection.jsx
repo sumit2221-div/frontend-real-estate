@@ -9,7 +9,7 @@ function PropertySection() {
   const [error, setError] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
-  const fetchProperties = async (filter) => {
+  const fetchProperties = async (filter = '') => {
     setLoading(true);
     setError('');
     try {
@@ -17,10 +17,12 @@ function PropertySection() {
       if (filter) {
         url += `?status=${filter}`;
       }
+      console.log('Fetching properties from URL:', url);
       const response = await axios.get(url);
+      console.log('Fetched properties:', response.data);
       setProperties(response.data);
-      console.log(response.data);
     } catch (err) {
+      console.error('Error fetching properties:', err);
       setError('Failed to fetch properties');
     } finally {
       setLoading(false);
@@ -48,16 +50,12 @@ function PropertySection() {
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
-    const threshold = 400; // Adjust this value as needed
-    if (scrollPosition > threshold) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
+    const threshold = 400;
+    setIsVisible(scrollPosition > threshold);
   };
 
   useEffect(() => {
-    fetchProperties();
+    fetchProperties(); // Fetch all properties on initial load
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -68,7 +66,7 @@ function PropertySection() {
         <Button variant="contained" color="primary" onClick={() => fetchProperties()}>
           All Properties
         </Button>
-        <Button variant="contained" color="success" onClick={() => fetchProperties(' sale')}>
+        <Button variant="contained" color="success" onClick={() => fetchProperties('sale')}>
           For Sale
         </Button>
         <Button variant="contained" color="warning" onClick={() => fetchProperties('rent')}>
@@ -79,7 +77,6 @@ function PropertySection() {
       {loading && <CircularProgress />}
       {error && <Typography color="error">{error}</Typography>}
 
-      {/* Grow effect for property cards */}
       <Box className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
         {properties.map((property) => (
           <Grow in={isVisible} timeout={1000} key={property._id}>

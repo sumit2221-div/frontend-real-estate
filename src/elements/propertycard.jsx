@@ -1,8 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CiHeart } from "react-icons/ci";
+import { Card, CardMedia, CardContent, Typography, Button } from '@mui/material';
 
 const PropertyCard = ({ property, onFavorite }) => {
+  const navigate = useNavigate(); // Hook to navigate to different pages
+
   const handleFavorite = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
@@ -17,33 +21,72 @@ const PropertyCard = ({ property, onFavorite }) => {
           }
         }
       );
-      onFavorite(property._id); // Call the parent function to update favorites
+      onFavorite(property._id); 
     } catch (error) {
       console.error('Error adding to favorites:', error);
     }
   };
 
+  const handleViewDetails = () => {
+    navigate(`/property/${property._id}`);
+  };
+
   return (
-    <div className='p-4 mb-4 bg-white rounded-lg shadow-lg'>
-      <img
-        src={property.photos[0]} // Display the first photo
+    <Card className='mb-4 shadow-lg'>
+      <CardMedia
+        component="img"
+        image={property.photos[0]} 
         alt={property.name}
-        className='object-cover w-full h-40 rounded-t-lg'
+        sx={{ height: 140, cursor: 'pointer' }}
+        onClick={handleViewDetails} // Navigate on click
       />
-      <div className='p-4'>
-        <h2 className='text-xl font-semibold'>{property.name}</h2>
-        <p className='text-gray-600'>Type: {property.type}</p>
-        <p className='text-gray-600'>Size: {property.size}</p>
-        <p className='text-gray-600'>Cost: ${property.cost.toLocaleString()}</p>
-        <button 
-          onClick={handleFavorite} 
-          className='flex items-center justify-center px-2 py-1 mt-2 text-lg text-white transition duration-300 ease-in-out transform bg-red-600 rounded-full shadow hover:bg-red-700 hover:scale-105'
-        >
-          <CiHeart className='mr-1' />
-          <span className='hidden md:inline'>Add to Favorites</span>
-        </button>
-      </div>
-    </div>
+      <CardContent>
+        <Typography variant="h6" component="div" className='font-semibold'>
+          {property.name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Type: {property.type}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Size: {property.size}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Status: {property.status}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Cost: ${property.cost.toLocaleString()}
+        </Typography>
+        <div className='flex justify-between mt-2'>
+          <Button
+            onClick={handleFavorite}
+            variant="contained"
+            color="error"
+            startIcon={<CiHeart />}
+            sx={{
+              px: 2,
+              '&:hover': {
+                transform: 'scale(1.05)',
+              },
+            }}
+          >
+            Add to Favorites
+          </Button>
+          <Button
+            onClick={handleViewDetails}
+            variant="contained"
+            color="primary"
+            sx={{
+              px: 4,
+              '&:hover': {
+                transform: 'scale(1.05)',
+              },
+            }}
+          >
+            View Details
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

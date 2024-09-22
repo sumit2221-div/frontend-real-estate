@@ -43,12 +43,16 @@ function Home() {
       {/* Background image with overlay */}
       <Box
         sx={{
-          position: 'relative',
+          
           width: '100%',
           height: '100vh',
           backgroundImage: `url(${photo})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          bgcolor: 'rgba(0, 0, 0, 0.5)',
+          filter: 'brightness(0.7)', // Dull the image
+          
         }}
       >
         <Box sx={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'rgba(0, 0, 0, 0.5)' }}>
@@ -111,22 +115,9 @@ function Home() {
           Why You Should Work With Us
         </Typography>
         <Grid container spacing={4} justifyContent="center">
-          {[
-            {
-              img: house,
-              title: "Wide Range of Properties",
-              text: "We offer expert legal help for all related property in India.",
-            },
-            {
-              img: buy,
-              title: "Buy or Rent Homes",
-              text: "We offer a large variety of properties across locations.",
-            },
-            {
-              img: protect,
-              title: "Trusted by Thousands",
-              text: "Our clients trust us for professional service and support.",
-            },
+          {[{ img: house, title: "Wide Range of Properties", text: "We offer expert legal help for all related property in India." },
+            { img: buy, title: "Buy or Rent Homes", text: "We offer a large variety of properties across locations." },
+            { img: protect, title: "Trusted by Thousands", text: "Our clients trust us for professional service and support." },
           ].map((item, idx) => (
             <Grid item xs={12} sm={6} md={4} key={idx}>
               <Card sx={{ textAlign: 'center', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
